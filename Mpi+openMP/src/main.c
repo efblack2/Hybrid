@@ -126,7 +126,7 @@ int main(int argc, char *argv[])
     
     if (myWorldRank == root) {
         printf("\nMax error at iteration %d was %f\n", iteration, dt);
-        printf ("Total time for %d nodes,  MPI processors and %d openMP threads was %f seconds.\n", nNodes, worldSize, nthreads,elapsed_time);
+        printf ("Total time for %d nodes, %d MPI processors and %d openMP threads was %f seconds.\n", nNodes, worldSize, nthreads,elapsed_time);
     } // end if //
     
     free(Temperature);
