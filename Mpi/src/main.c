@@ -5,6 +5,7 @@
 #include <mpi.h>
 #include "myMPI.h"
 
+
 #include "dataDef.h"
 
 //   helper routines
@@ -24,9 +25,6 @@ int main(int argc, char *argv[])
     MPI_Comm_split_type(MPI_COMM_WORLD,MPI_COMM_TYPE_SHARED, 0,MPI_INFO_NULL, &sm_comm);
 
     int myWorldRank, worldSize;
-
-    MPI_Comm_rank(MPI_COMM_WORLD,&myWorldRank);
-    MPI_Comm_size(MPI_COMM_WORLD,&worldSize);
 
     MPI_Comm_rank(MPI_COMM_WORLD,&myWorldRank);
     MPI_Comm_size(MPI_COMM_WORLD,&worldSize);

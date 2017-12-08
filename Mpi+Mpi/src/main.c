@@ -1,13 +1,10 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
-
 
 #include <sys/time.h>
 #include <mpi.h>
 #include "myMPI.h"
 
-#define CEILING(i,j)       (((i)+(j)-1)/(j))
 
 #include "dataDef.h"
 
@@ -27,7 +24,7 @@ int main(int argc, char *argv[])
     MPI_Comm sm_comm;
     MPI_Comm_split_type(MPI_COMM_WORLD,MPI_COMM_TYPE_SHARED, 0,MPI_INFO_NULL, &sm_comm);
 
-    int myWorldRank,worldSize;
+    int myWorldRank, worldSize;
     
     MPI_Comm_rank(MPI_COMM_WORLD,&myWorldRank);
     MPI_Comm_size(MPI_COMM_WORLD,&worldSize);
@@ -37,24 +34,6 @@ int main(int argc, char *argv[])
     MPI_Comm_size(sm_comm,&sharedSize);
     int nNodes=CEILING(worldSize,sharedSize);
 
-/*    
-    if (mySharedRank==0) {
-        printf("total processors: %d, local processors %d worldRank: %d\n",worldSize, sharedSize, myWorldRank);fflush(stdout);
-    }
-    MPI_Barrier(MPI_COMM_WORLD);
-    MPI_Finalize();
-    exit(0);
-*/    
-    
-/*    
-    if (worldSize==sharedSize) {
-        printf("running in one node\n");fflush(stdout);
-    }  // end if //
-    printf("worldSize: %d,sharedSize %d\n",worldSize,sharedSize );fflush(stdout);
-    MPI_Barrier(MPI_COMM_WORLD);
-    MPI_Finalize();
-    exit(0);
-*/    
 
     const int root=0; 
     //const int root=commSize-1; 
@@ -298,3 +277,24 @@ void track_progress(int iteration, double *T,  int sRow, int eRow)
     printf("\n");   
 
 } // end  track_progress()//
+
+
+/*    
+    if (mySharedRank==0) {
+        printf("total processors: %d, local processors %d worldRank: %d\n",worldSize, sharedSize, myWorldRank);fflush(stdout);
+    }
+    MPI_Barrier(MPI_COMM_WORLD);
+    MPI_Finalize();
+    exit(0);
+*/    
+    
+/*    
+    if (worldSize==sharedSize) {
+        printf("running in one node\n");fflush(stdout);
+    }  // end if //
+    printf("worldSize: %d,sharedSize %d\n",worldSize,sharedSize );fflush(stdout);
+    MPI_Barrier(MPI_COMM_WORLD);
+    MPI_Finalize();
+    exit(0);
+*/    
+
