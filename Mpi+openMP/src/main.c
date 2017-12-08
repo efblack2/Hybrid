@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
     MPI_Status status[2];
     MPI_Request request[2];
 
-    int myRank, commSize;
+    int myRank, commSize, nthreads;
 
     MPI_Comm_rank(MPI_COMM_WORLD,&myRank);
     MPI_Comm_size(MPI_COMM_WORLD,&commSize);
@@ -69,8 +69,11 @@ int main(int argc, char *argv[])
     MPI_Barrier(MPI_COMM_WORLD);
     elapsed_time = -MPI_Wtime();
     
-    #pragma omp parallel 
-    initialize(Temperature,Temperature_last,sRow, eRow, myRank,commSize-1); // initialize Temp_last including boundary conditions
+    #pragma omp parallel
+    { 
+        nthreads = omp_get_num_threads();
+        initialize(Temperature,Temperature_last,sRow, eRow, myRank,commSize-1); // initialize Temp_last including boundary conditions
+    } // end of parallel region
     
     MPI_Barrier(MPI_COMM_WORLD);
 
@@ -114,7 +117,7 @@ int main(int argc, char *argv[])
     
     if (myRank == root) {
         printf("\nMax error at iteration %d was %f\n", iteration, dt);
-        printf ("Total time was %f seconds.\n", elapsed_time);
+        printf ("Total time for %d MPI processors and %d openMP threads was %f seconds.\n",commSize, nthreads,elapsed_time);
     } // end if //
     
     free(Temperature);

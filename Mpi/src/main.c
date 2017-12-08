@@ -20,16 +20,28 @@ int main(int argc, char *argv[])
     MPI_Status status[2];
     MPI_Request request[2];
 
-    int myRank, commSize;
+    MPI_Comm sm_comm;
+    MPI_Comm_split_type(MPI_COMM_WORLD,MPI_COMM_TYPE_SHARED, 0,MPI_INFO_NULL, &sm_comm);
 
-    MPI_Comm_rank(MPI_COMM_WORLD,&myRank);
-    MPI_Comm_size(MPI_COMM_WORLD,&commSize);
+    int myWorldRank, worldSize;
+
+    MPI_Comm_rank(MPI_COMM_WORLD,&myWorldRank);
+    MPI_Comm_size(MPI_COMM_WORLD,&worldSize);
+
+    MPI_Comm_rank(MPI_COMM_WORLD,&myWorldRank);
+    MPI_Comm_size(MPI_COMM_WORLD,&worldSize);
+
+    int mySharedRank,sharedSize;
+    MPI_Comm_rank(sm_comm,&mySharedRank);
+    MPI_Comm_size(sm_comm,&sharedSize);
+    int nNodes=CEILING(worldSize,sharedSize);
+
     
     const int root=0; 
-    //const int root=commSize-1; 
+    //const int root=worldSize-1; 
     
-    const int sRow = (BLOCK_LOW (myRank,commSize,ROWS)+1);
-    const int eRow = (BLOCK_HIGH(myRank,commSize,ROWS)+1);
+    const int sRow = (BLOCK_LOW (myWorldRank,worldSize,ROWS)+1);
+    const int eRow = (BLOCK_HIGH(myWorldRank,worldSize,ROWS)+1);
     const int nRows=eRow-sRow + 3;
 
     int max_iterations;                                 // number of iterations
@@ -43,7 +55,7 @@ int main(int argc, char *argv[])
     } // end if //
     
     if ( (argc <= 1 || max_iterations < 0 ) ) {  // using rank 0 because of scanf()
-        if (myRank == 0) {                              // using rank 0 because of scanf()
+        if (myWorldRank == 0) {                              // using rank 0 because of scanf()
             printf("Maximum iterations [100-4000]?: ");fflush(stdout);
             while ( !scanf("%d", &max_iterations)  || max_iterations < 0 ) {
                 printf("wrong input value. Try again... ");fflush(stdout);
@@ -52,7 +64,7 @@ int main(int argc, char *argv[])
         MPI_Bcast(&max_iterations, 1, MPI_INT, 0,MPI_COMM_WORLD);    
     } // endif //
 
-    if (myRank == root) printf("Running %d iterations \n",max_iterations);fflush(stdout);
+    if (myWorldRank == root) printf("Running %d iterations \n",max_iterations);fflush(stdout);
     
     
     double *Temperature;                       // temperature grid
@@ -68,7 +80,7 @@ int main(int argc, char *argv[])
     elapsed_time = -MPI_Wtime();
     
 
-    initialize(Temperature,Temperature_last,sRow, eRow, myRank,commSize-1); // initialize Temp_last including boundary conditions
+    initialize(Temperature,Temperature_last,sRow, eRow, myWorldRank,worldSize-1); // initialize Temp_last including boundary conditions
     MPI_Barrier(MPI_COMM_WORLD);
     
 
@@ -79,15 +91,15 @@ int main(int argc, char *argv[])
         dt = laplace(Temperature,Temperature_last, sRow,eRow);
         MPI_Allreduce(MPI_IN_PLACE,&dt, 1,MPI_DOUBLE,MPI_MAX,MPI_COMM_WORLD);
         
-        if (myRank < commSize-1) { 
-            MPI_Irecv(&Temperature[(nRows-1)*COL2],COL2,MPI_DOUBLE,myRank+1,200,MPI_COMM_WORLD,&request[0]);
-            MPI_Isend(&Temperature[(nRows-2)*COL2],COL2,MPI_DOUBLE,myRank+1,100,MPI_COMM_WORLD,&request[1]);
+        if (myWorldRank < worldSize-1) { 
+            MPI_Irecv(&Temperature[(nRows-1)*COL2],COL2,MPI_DOUBLE,myWorldRank+1,200,MPI_COMM_WORLD,&request[0]);
+            MPI_Isend(&Temperature[(nRows-2)*COL2],COL2,MPI_DOUBLE,myWorldRank+1,100,MPI_COMM_WORLD,&request[1]);
             MPI_Waitall(2,request, status);
         } // end if //  
 
-        if (myRank > 0)  {
-            MPI_Irecv(&Temperature[0]   ,COL2,MPI_DOUBLE,myRank-1,100,MPI_COMM_WORLD,&request[0]);
-            MPI_Isend(&Temperature[COL2],COL2,MPI_DOUBLE,myRank-1,200,MPI_COMM_WORLD,&request[1]);
+        if (myWorldRank > 0)  {
+            MPI_Irecv(&Temperature[0]   ,COL2,MPI_DOUBLE,myWorldRank-1,100,MPI_COMM_WORLD,&request[0]);
+            MPI_Isend(&Temperature[COL2],COL2,MPI_DOUBLE,myWorldRank-1,200,MPI_COMM_WORLD,&request[1]);
             MPI_Waitall(2,request, status);
         } // end if //
         
@@ -97,7 +109,7 @@ int main(int argc, char *argv[])
         Temperature=temp;        
         
         // periodically print test values
-        if((iteration % 100) == 0  && myRank == commSize-1 ) {
+        if((iteration % 100) == 0  && myWorldRank == worldSize-1 ) {
  	        track_progress(iteration,Temperature_last, sRow, eRow );
  	        printf("Max error at iteration %d is %f\n", iteration, dt);
         } // end if //
@@ -108,9 +120,9 @@ int main(int argc, char *argv[])
     MPI_Barrier(MPI_COMM_WORLD);
     elapsed_time += MPI_Wtime();
     
-    if (myRank == root) {
+    if (myWorldRank == root) {
         printf("\nMax error at iteration %d was %f\n", iteration, dt);
-        printf ("Total time was %f seconds.\n", elapsed_time);
+        printf ("Total time for %d nodes and %d MPI processors was %f seconds.\n",nNodes, worldSize, elapsed_time);
     } // end if //
     
     free(Temperature);

@@ -7,6 +7,8 @@
 #include <mpi.h>
 #include "myMPI.h"
 
+#define CEILING(i,j)       (((i)+(j)-1)/(j))
+
 #include "dataDef.h"
 
 //   helper routines
@@ -22,7 +24,6 @@ int main(int argc, char *argv[])
     MPI_Status status[2];
     MPI_Request request[2];
 
-
     MPI_Comm sm_comm;
     MPI_Comm_split_type(MPI_COMM_WORLD,MPI_COMM_TYPE_SHARED, 0,MPI_INFO_NULL, &sm_comm);
 
@@ -34,6 +35,7 @@ int main(int argc, char *argv[])
     int mySharedRank,sharedSize;
     MPI_Comm_rank(sm_comm,&mySharedRank);
     MPI_Comm_size(sm_comm,&sharedSize);
+    int nNodes=CEILING(worldSize,sharedSize);
 
 /*    
     if (mySharedRank==0) {
@@ -225,7 +227,7 @@ int main(int argc, char *argv[])
     
     if (myWorldRank == root) {
         printf("\nMax error at iteration %d was %f\n", iteration, dt);
-        printf ("Total time was %f seconds.\n", elapsed_time);
+        printf ("Total time for %d nodes, %d total MPI processors and %d MPI processors per node was %f seconds.\n",nNodes, worldSize, sharedSize,elapsed_time);
     } // end if //
     
     /*
