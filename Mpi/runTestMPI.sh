@@ -27,7 +27,7 @@ done
 
 mkdir -p ../../plots/MPI+MPI/$(hostname)/$3
 
-cat $tempFilename | awk 'BEGIN{} {print $4,$7, $8, $11} END{}' | awk '{Prod[$2]++; min[$2]=Prod[$2]==1||min[$2]>$4?$4:min[$2]} END{ for (var in Prod) printf "%s processors: the min is %f\n", var,min[var]}' | sort -n  > ../../plots/MPI+MPI/$(hostname)/$3/$outputFilename
+cat $tempFilename | awk 'BEGIN{} {print $4,$7, $8, $11} END{}' | awk '{Prod[$2]++; min[$2]=Prod[$2]==1||min[$2]>$4?$4:min[$2]} END{ for (var in Prod) printf "%s processors: the min is %f\n", var,min[var]}' | sort -n  > ../../plots/MPI/$(hostname)/$3/$outputFilename
 
 rm $tempFilename
 
