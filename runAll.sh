@@ -10,11 +10,14 @@ cd ../../Mpi+openMP/buildGnu
 
 cd ../../Mpi+Mpi/buildGnu
 
-../runTestMPI+Mpi.sh  laplace_MPI+Mpi    4000 gnu
+../runTestMPI+MPI.sh  laplace_MPI+MPI    4000 gnu
 
 cd ../../
 
-intelMpi
+export CC=icc
+export CXX=icpc
+source setIcc intel64 
+source setImpi
 
 cd Mpi/buildIntel
 
@@ -26,11 +29,14 @@ cd ../../Mpi+openMP/buildIntel
 
 cd ../../Mpi+Mpi/buildIntel
 
-../runTestMPI+Mpi.sh  laplace_MPI+Mpi    4000 intel
+../runTestMPI+MPI.sh  laplace_MPI+MPI    4000 intel
 
 cd ../../
 
-pgiMpi
+export CC=pgcc
+export CXX=pgc++
+source setPgi 17.10
+source setPgiMpi 17.10
 
 cd Mpi/buildPgi
 
@@ -42,6 +48,6 @@ cd ../../Mpi+openMP/buildPgi
 
 cd ../../Mpi+Mpi/buildPgi
 
-../runTestMPI+Mpi.sh  laplace_MPI+Mpi    4000 pgi
+../runTestMPI+MPI.sh  laplace_MPI+MPI    4000 pgi
 
 cd ../../
