@@ -1,24 +1,24 @@
-1 processors: the min is 99.829036	1 threads: the min is 100.019425
-2 processors: the min is 54.567490	2 threads: the min is 52.859060
-3 processors: the min is 36.717229	3 threads: the min is 38.422853
-4 processors: the min is 27.409379	4 threads: the min is 32.966991
-5 processors: the min is 23.714709	5 threads: the min is 30.589252
-6 processors: the min is 19.870616	6 threads: the min is 29.618238
-7 processors: the min is 19.079531	7 threads: the min is 28.801702
-8 processors: the min is 16.777166	8 threads: the min is 28.386528
-9 processors: the min is 17.168431	9 threads: the min is 28.287287
-10 processors: the min is 15.499879	10 threads: the min is 28.160148
-11 processors: the min is 16.215803	11 threads: the min is 28.039230
-12 processors: the min is 14.892714	12 threads: the min is 28.014935
-13 processors: the min is 15.677689	13 threads: the min is 33.578033
-14 processors: the min is 14.611342	14 threads: the min is 32.491384
-15 processors: the min is 15.353540	15 threads: the min is 31.223625
-	16 threads: the min is 30.218050
-	17 threads: the min is 29.808521
-	18 threads: the min is 29.406937
-	19 threads: the min is 29.408601
-	20 threads: the min is 29.730807
-	21 threads: the min is 29.907850
-	22 threads: the min is 30.082443
-	23 threads: the min is 30.251320
-	24 threads: the min is 30.230854
+1 processors: the min is 100.481085	1 threads: the min is 100.019425
+2 processors: the min is 54.156006	2 threads: the min is 52.859060
+3 processors: the min is 36.618313	3 threads: the min is 38.422853
+4 processors: the min is 27.541468	4 threads: the min is 32.966991
+5 processors: the min is 23.672096	5 threads: the min is 30.589252
+6 processors: the min is 19.792560	6 threads: the min is 29.618238
+7 processors: the min is 19.097698	7 threads: the min is 28.801702
+8 processors: the min is 16.741726	8 threads: the min is 28.386528
+9 processors: the min is 17.166067	9 threads: the min is 28.287287
+10 processors: the min is 15.512116	10 threads: the min is 28.160148
+11 processors: the min is 16.207606	11 threads: the min is 28.039230
+12 processors: the min is 14.901876	12 threads: the min is 28.014935
+13 processors: the min is 15.679732	13 threads: the min is 33.578033
+14 processors: the min is 14.596528	14 threads: the min is 32.491384
+15 processors: the min is 15.364638	15 threads: the min is 31.223625
+16 processors: the min is 14.442055	16 threads: the min is 30.218050
+17 processors: the min is 15.159425	17 threads: the min is 29.808521
+18 processors: the min is 14.368633	18 threads: the min is 29.406937
+19 processors: the min is 15.034530	19 threads: the min is 29.408601
+20 processors: the min is 14.322882	20 threads: the min is 29.730807
+21 processors: the min is 14.964232	21 threads: the min is 29.907850
+22 processors: the min is 14.323699	22 threads: the min is 30.082443
+23 processors: the min is 14.925599	23 threads: the min is 30.251320
+24 processors: the min is 14.337293	24 threads: the min is 30.230854
