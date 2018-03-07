@@ -28,8 +28,8 @@ include_directories("src/include")
 add_subdirectory(src)
 
 
-add_executable(laplace_MPI+openMP ${laplace_MPI+openMP_Src})
-target_link_libraries(laplace_MPI+openMP ${MPI_LIBRARIES} ${CMAKE_EXE_LINKER_FLAGS})
+add_executable(laplace_MPI+OpenMP ${laplace_MPI+openMP_Src})
+target_link_libraries(laplace_MPI+OpenMP ${MPI_LIBRARIES} ${CMAKE_EXE_LINKER_FLAGS})
 
 
 ############### Debug messages ####################
