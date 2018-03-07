@@ -5,6 +5,16 @@ then
   exit 1
 fi
 
+cd $1/gnu
+paste laplace_MPI+MPI.txt  laplace_MPI+OpenMP.txt > laplace.txt
+
+cd ../intel
+paste laplace_MPI+MPI.txt  laplace_MPI+OpenMP.txt > laplace.txt
+
+cd ../pgi
+paste laplace_MPI+MPI.txt  laplace_MPI+OpenMP.txt > laplace.txt
+
+cd ../..
 
 
 gnuplot -c plot.gnp $1 
