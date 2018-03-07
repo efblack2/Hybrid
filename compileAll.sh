@@ -11,9 +11,9 @@ mkdir -p  Mpi+Mpi/buildPgi
 mkdir -p  Mpi+OpenMP/buildPgi
 
 cd Mpi+OpenMP/buildGnu
-cmake .. ; make
+cmake .. ; make clean; make
 cd ../../Mpi+Mpi/buildGnu
-cmake .. ; make
+cmake .. ; make clean; make
 cd ../../
 
 export CC=icc
@@ -22,9 +22,9 @@ source setIcc intel64
 source setImpi
 
 cd Mpi+OpenMP/buildIntel
-cmake .. ; make
+cmake .. ; make clean; make
 cd ../../Mpi+Mpi/buildIntel
-cmake .. ; make
+cmake .. ; make clean; make
 cd ../../
 
 export CC=pgcc
@@ -33,8 +33,8 @@ source setPgi 18.1
 source setPgiMpi 18.10
 
 cd Mpi+OpenMP/buildPgi
-cmake .. ; make
+cmake .. ; make clean; make
 cd ../../Mpi+Mpi/buildPgi
-cmake .. ; make
+cmake .. ; make clean; make
 cd ../../
 
