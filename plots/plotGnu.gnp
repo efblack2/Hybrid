@@ -27,4 +27,4 @@ set label "Share Memory Programing Model" at graph 0.5, 1.035 center font "Arial
 
 plot [0:] [0:] \
         machine.'/gnu/laplace_MPI+MPI.txt'      using 1:6 title "Gnu MPI_{sm}"   with linespoints ls 1,\
-        machine.'/gnu/laplace_MPI+openMP.txt'   using 1:6 title "Gnu openMP"     with linespoints ls 2
+        machine.'/gnu/laplace_MPI+openMP.txt'   using 1:6 title "Gnu OpenMP"     with linespoints ls 2
