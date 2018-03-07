@@ -1,22 +1,18 @@
 #!/bin/bash
 
-mkdir   Mpi/buildGnu
-mkdir   Mpi+Mpi/buildGnu
-mkdir   Mpi+openMP/buildGnu
 
-mkdir   Mpi/buildIntel
-mkdir   Mpi+Mpi/buildIntel
-mkdir   Mpi+openMP/buildIntel
+mkdir -p  Mpi+Mpi/buildGnu
+mkdir -p  Mpi+OpenMP/buildGnu
 
-mkdir   Mpi/buildPgi
-mkdir   Mpi+Mpi/buildPgi
-mkdir   Mpi+openMP/buildPgi
+mkdir -p  Mpi+Mpi/buildIntel
+mkdir -p  Mpi+OpenMP/buildIntel
 
-cd Mpi+openMP/buildGnu
+mkdir -p  Mpi+Mpi/buildPgi
+mkdir -p  Mpi+OpenMP/buildPgi
+
+cd Mpi+OpenMP/buildGnu
 cmake .. ; make
 cd ../../Mpi+Mpi/buildGnu
-cmake .. ; make
-cd ../../Mpi/buildGnu
 cmake .. ; make
 cd ../../
 
@@ -25,24 +21,20 @@ export CXX=icpc
 source setIcc intel64 
 source setImpi
 
-cd Mpi+openMP/buildIntel
+cd Mpi+OpenMP/buildIntel
 cmake .. ; make
 cd ../../Mpi+Mpi/buildIntel
-cmake .. ; make
-cd ../../Mpi/buildIntel
 cmake .. ; make
 cd ../../
 
 export CC=pgcc
 export CXX=pgc++
-source setPgi 17.10
-source setPgiMpi 17.10
+source setPgi 18.1
+source setPgiMpi 18.10
 
-cd Mpi+openMP/buildPgi
+cd Mpi+OpenMP/buildPgi
 cmake .. ; make
 cd ../../Mpi+Mpi/buildPgi
-cmake .. ; make
-cd ../../Mpi/buildPgi
 cmake .. ; make
 cd ../../
 

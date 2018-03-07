@@ -1,53 +1,39 @@
 #!/bin/bash
 
-cd Mpi/buildGnu
 
-../runTestMPI.sh laplace_MPI 4000 gnu
-
-cd ../../Mpi+openMP/buildGnu
-
-../runTestMPI+openMP.sh  laplace_MPI+openMP    4000 gnu
+cd Mpi+OpenMP/buildGnu
+make clean; make
+../runTestMPI+OpenMP.sh  laplace_MPI+OpenMP  100 gnu
 
 cd ../../Mpi+Mpi/buildGnu
-
-../runTestMPI+MPI.sh  laplace_MPI+MPI    4000 gnu
+make clean; make
+../runTestMPI+MPI.sh  laplace_MPI+MPI   100 gnu
 
 cd ../../
 
-export CC=icc
-export CXX=icpc
 source setIcc intel64 
 source setImpi
 
-cd Mpi/buildIntel
-
-../runTestMPI.sh laplace_MPI 4000 intel
-
-cd ../../Mpi+openMP/buildIntel
-
-../runTestMPI+openMP.sh  laplace_MPI+openMP    4000 intel
+cd Mpi+OpenMP/buildIntel
+make clean; make
+../runTestMPI+OpenMP.sh  laplace_MPI+OpenMP  100 intel
 
 cd ../../Mpi+Mpi/buildIntel
-
-../runTestMPI+MPI.sh  laplace_MPI+MPI    4000 intel
+make clean; make
+../runTestMPI+MPI.sh  laplace_MPI+MPI   100 intel
 
 cd ../../
 
-export CC=pgcc
-export CXX=pgc++
-source setPgi 17.10
-source setPgiMpi 17.10
+source setPgi 18.1
+source setPgiMpi 18.10
 
-cd Mpi/buildPgi
-
-../runTestMPI.sh laplace_MPI 4000 pgi
-
-cd ../../Mpi+openMP/buildPgi
-
-../runTestMPI+openMP.sh  laplace_MPI+openMP    4000 pgi
+cd Mpi+OpenMP/buildPgi
+make clean; make
+../runTestMPI+OpenMP.sh  laplace_MPI+OpenMP  100 pgi
 
 cd ../../Mpi+Mpi/buildPgi
-
-../runTestMPI+MPI.sh  laplace_MPI+MPI    4000 pgi
+make clean; make
+../runTestMPI+MPI.sh  laplace_MPI+MPI   100 pgi
 
 cd ../../
+
