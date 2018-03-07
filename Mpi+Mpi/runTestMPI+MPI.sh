@@ -11,7 +11,8 @@ program=$1
 outputFilename=$program'.txt'
 
 nloops=5
-np=`grep -c ^processor /proc/cpuinfo`
+npt=`grep -c ^processor /proc/cpuinfo`
+np="$(($npt / 2))"
 
 rm -f $tempFilename
 
