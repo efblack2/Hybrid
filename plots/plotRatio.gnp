@@ -23,10 +23,10 @@ set ylabel "Time [S]"
      
 set title machine
 #set label "" at screen 0.5, 0.9 center font "Arial,11"
-set label "MPI\_{sm} to openMP Ratio" at graph 0.5, 1.035 center font "Arial,11"
+set label "OpenMP to MPI\_{sm} Ratio" at graph 0.5, 1.035 center font "Arial,11"
 
-plot [0:] [0:2] \
-        machine.'/gnu/laplace.txt'   using 1:($6/$12) title "Gnu Compiler"   with linespoints ls 1,\
-        machine.'/intel/laplace.txt' using 1:($6/$12) title "Intel Compiler" with linespoints ls 3,\
-        machine.'/pgi/laplace.txt'   using 1:($6/$12) title "Pgi Compiler"   with linespoints ls 5,\
+plot [0:] [0:] \
+        machine.'/gnu/laplace.txt'   using 1:($12/$6) title "Gnu Compiler"   with linespoints ls 1,\
+        machine.'/intel/laplace.txt' using 1:($12/$6) title "Intel Compiler" with linespoints ls 3,\
+        machine.'/pgi/laplace.txt'   using 1:($12/$6) title "Pgi Compiler"   with linespoints ls 5,\
      
