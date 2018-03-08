@@ -1,0 +1,8 @@
+1 threads: the min is 92.523661
+2 threads: the min is 49.615520
+3 threads: the min is 36.761865
+4 threads: the min is 33.015258
+5 threads: the min is 31.400274
+6 threads: the min is 30.532005
+7 threads: the min is 30.439708
+8 threads: the min is 31.686142
