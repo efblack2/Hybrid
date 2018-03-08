@@ -23,3 +23,4 @@ gnuplot -c plotRatio.gnp $1
 gnuplot -c plotGnu.gnp $1  
 gnuplot -c plotGnuRatio.gnp $1  
 
+rm `find . -name  laplace.txt`
