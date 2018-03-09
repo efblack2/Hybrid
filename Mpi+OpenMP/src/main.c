@@ -12,7 +12,7 @@
 void initialize(double *Temperature, double *Temperature_last,int sRow,int eRow, int rank, int lastRank);
 void track_progress(int iter, double *Temperature,  int sRow, int eRow);
 
-double laplace(double *restrict tNew, double *restrict tOld, int rowS, int rowE);
+double laplace(double *restrict tNew, double *restrict tOld, int nRows);
 
 int main(int argc, char *argv[]) 
 {
@@ -92,8 +92,7 @@ int main(int argc, char *argv[])
         ++iteration;
         dt = 0.0;  // reset largest temperature change
         #pragma omp parallel reduction (max:dt)
-        dt = laplace(Temperature,Temperature_last, sRow,eRow);
-        MPI_Allreduce(MPI_IN_PLACE,&dt, 1,MPI_DOUBLE,MPI_MAX,MPI_COMM_WORLD);
+        dt = laplace(Temperature,Temperature_last, nRows-2);
         
         if (myWorldRank < worldSize-1) { 
             MPI_Irecv(&Temperature[(nRows-1)*COL2],COL2,MPI_DOUBLE,myWorldRank+1,200,MPI_COMM_WORLD,&request[0]);

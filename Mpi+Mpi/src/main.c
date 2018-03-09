@@ -12,7 +12,7 @@
 void initialize(double *Temperature, double *Temperature_last,int sRow,int eRow, int rank, int lastRank);
 void track_progress(int iter, double *Temperature,  int sRow, int eRow);
 
-double laplace(double *restrict tNew, double *restrict tOld, int rowS, int rowE);
+double laplace(double *restrict tNew, double *restrict tOld, int nRows);
 
 int main(int argc, char *argv[]) 
 {
@@ -146,8 +146,7 @@ int main(int argc, char *argv[])
     // do until error is minimal or until max steps
     do {
         ++iteration;
-        dt = laplace(Temperature,Temperature_last, sRow,eRow);
-
+        dt = laplace(Temperature,Temperature_last,nRows-2);
         MPI_Allreduce(MPI_IN_PLACE,&dt, 1,MPI_DOUBLE,MPI_MAX,MPI_COMM_WORLD);
         
         if (myWorldRank < worldSize-1) { 

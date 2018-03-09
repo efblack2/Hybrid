@@ -1,12 +1,12 @@
 #include <math.h>
 #include "dataDef.h"
 
-double laplace(double *restrict tNew, double *restrict tOld, int sRow, int eRow)
+double laplace(double *restrict tNew, double *restrict tOld, int nRows)
 {
     // main calculation: average my four neighbors
-    const int nRows = eRow-sRow + 1;
     //printf("nRows: %d\n", nRows);
     double dt=0.0;   // reset largest temperature change
+
     
     for(int r = COL2; r <=(nRows*COL2) ; r+=COL2) {
         for(int c = 1; c <= COLUMNS; ++c) {
