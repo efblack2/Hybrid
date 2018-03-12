@@ -1,7 +1,7 @@
 #!/bin/bash
 if [ "$#" -ne 3 ] 
 then
-  echo "Usage: $0  programName numberOfIterations  compiler"
+  echo "Usage: $0 numberOfIterations  compiler"
   exit 1
 fi
 
