@@ -21,6 +21,7 @@ int main(int argc, char *argv[])
     struct timeval tp;                                   // timer
     double elapsed_time;
     const int size = ROW2 * COL2;
+    int nthreads;
     
     double *restrict Temperature;                       // temperature grid
     double *restrict Temperature_last;                  // temperature grid from last iteration
@@ -28,6 +29,11 @@ int main(int argc, char *argv[])
 
     Temperature      = malloc(size*sizeof(double));
     Temperature_last = malloc(size*sizeof(double));
+
+    #pragma omp parallel
+    { 
+        nthreads = omp_get_num_threads();
+    } // end of parallel region
     
 
     if (argc > 1 ) {
@@ -39,6 +45,9 @@ int main(int argc, char *argv[])
             exit(0);
         } // end if //       
     } // endif //
+    
+    
+    
     printf("Ruuning %d iterations \n",max_iterations);
 
     gettimeofday(&tp,NULL);  // Unix timer
@@ -66,7 +75,7 @@ int main(int argc, char *argv[])
     elapsed_time += (tp.tv_sec*1.0e6 + tp.tv_usec);
 
     printf("\nMax error at iteration %d was %f\n", iteration, dt);
-    printf ("Total time was %f seconds.\n", elapsed_time*1.0e-6);
+    printf ("Total time for %d nodes, %d MPI processors and %d openMP threads was %f seconds.\n", 1, 0, nthreads,elapsed_time*1.0e-6);
     
     free(Temperature);
     free(Temperature_last);
@@ -79,6 +88,7 @@ int main(int argc, char *argv[])
 // Temp_last is used to to start first iteration
 void initialize(double *Temperature, double *Temperature_last)
 {
+    #pragma omp parallel for
     for(int r = 0; r < ROW2*COL2; r+=COL2){
         for (int c = 0; c <= COLUMNS+1; ++c){
             Temperature[r+c] = Temperature_last[r+c] = 0.0;
