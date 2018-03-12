@@ -2,8 +2,8 @@
 
 
 cd OpenMP/buildGnu
-make clean; make
-../runTestOpenMP.sh  4000 gnu
+#make clean; make
+#../runTestOpenMP.sh  4000 gnu
 
 cd ../../Mpi+OpenMP/buildGnu
 make clean; make
@@ -19,8 +19,8 @@ source setIcc intel64
 source setImpi
 
 cd OpenMP/buildIntel
-make clean; make
-../runTestOpenMP.sh  4000 intel
+#make clean; make
+#../runTestOpenMP.sh  4000 intel
 
 cd ../../Mpi+OpenMP/buildIntel
 make clean; make
@@ -36,8 +36,8 @@ source setPgi 18.1
 source setPgiMpi 18.10
 
 cd OpenMP/buildPgi
-make clean; make
-../runTestOpenMP.sh  4000 pgi
+#make clean; make
+#../runTestOpenMP.sh  4000 pgi
 
 cd ../../Mpi+OpenMP/buildPgi
 make clean; make
