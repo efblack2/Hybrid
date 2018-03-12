@@ -1,5 +1,5 @@
 #!/bin/bash
-if [ "$#" -ne 2 ] 
+if [ "$#" -ne 2 ]
 then
   echo "Usage: $0 numberOfIterations  compiler"
   exit 1
@@ -16,10 +16,12 @@ np="$(($npt / 1))"
 rm -f $tempFilename
 
 for i in  `seq 1 $np`; do
+#for i in 1  `seq 4 4  $np`; do
     export OMP_NUM_THREADS=$i
     for j in  `seq 1 $nloops`; do
-        echo number of threads: $i, run number: $j 
+        echo number of threads: $i, run number: $j
         mpiexec -n 1 laplace_MPI+OpenMP $1 | grep Total >>  $tempFilename
+        #aprun -n 1  -N 1 -d $i laplace_MPI+OpenMP $1 | grep Total >>  $tempFilename
     done
 done
 
