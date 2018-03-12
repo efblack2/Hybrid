@@ -19,7 +19,7 @@ for i in  `seq 1 $np`; do
     export OMP_NUM_THREADS=$i
     for j in  `seq 1 $nloops`; do
         echo number of threads: $i, run number: $j 
-        mpiexec -n 1 laplace_OpenMP $1 | grep Total >>  $tempFilename
+        ./laplace_OpenMP $1 | grep Total >>  $tempFilename
     done
 done
 
