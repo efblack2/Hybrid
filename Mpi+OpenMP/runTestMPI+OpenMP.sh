@@ -9,6 +9,10 @@ tempFilename='anyTempFileNameWillWork.txt'
 
 outputFilename='laplace_MPI+OpenMP.txt'
 
+# needed by intel compiler in Blue Waters
+export KMP_AFFINITY=disabled
+# needed by intel compiler in Blue Waters
+
 nloops=5
 npt=`grep -c ^processor /proc/cpuinfo`
 np="$(($npt / 1))"
