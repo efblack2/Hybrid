@@ -15,7 +15,8 @@ set style line 4 dt 4 ps 0.5 lc rgb "#0099ff";
 set style line 5 dt 1 ps 0.6 lc rgb "#00ff00";
 set style line 6 dt 4 ps 0.5 lc rgb "#00ff99";
 
-set key top left box
+#set key top left box
+set key bottom right box
 set grid
 
 set xlabel "Number of Processors/Threads"
