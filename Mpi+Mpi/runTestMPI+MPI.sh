@@ -43,12 +43,12 @@ elif [ -n "$INTEL_LICENSE_FILE" ]; then
     echo "Intel Compiler"
 else
     echo "Gnu Compiler"
-fi  
+fi
 
 
 rm -f $tempFilename
 
-for i in  `seq 1 $np`; do
+for i in 1  `seq 2 2 $np`; do
 #for i in  1 4 `seq 4  4 $np`; do
 
     for j in  `seq 1 $nloops`; do

@@ -6,12 +6,7 @@ then
 fi
 
 tempFilename='anyTempFileNameWillWork.txt'
-
 outputFilename='laplace_MPI+OpenMP.txt'
-
-# needed by intel compiler in Blue Waters
-export KMP_AFFINITY=disabled
-# needed by intel compiler in Blue Waters
 
 nloops=3
 npt=`grep -c ^processor /proc/cpuinfo`
@@ -59,11 +54,11 @@ else
     export OMP_PLACES=sockets
     export OMP_PROC_BIND=true
     #GOMP_CPU_AFFINITY="0-$npm1"
-fi  
+fi
 
 rm -f $tempFilename
 
-for i in  `seq 1 $np`; do
+for i in  1 `seq 2  2 $np`; do
 #for i in 1  `seq 4 4  $np`; do
     export OMP_NUM_THREADS=$i
     for j in  `seq 1 $nloops`; do
