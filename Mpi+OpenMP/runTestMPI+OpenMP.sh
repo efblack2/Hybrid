@@ -16,7 +16,6 @@ export KMP_AFFINITY=disabled
 nloops=5
 npt=`grep -c ^processor /proc/cpuinfo`
 np="$(($npt / 1))"
-np="$(($npt / 1))"
 npps="$(($np / 2))"
 npm1="$(($np - 1))"
 
