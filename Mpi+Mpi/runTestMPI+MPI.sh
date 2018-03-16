@@ -9,7 +9,7 @@ tempFilename='anyTempFileNameWillWork.txt'
 
 outputFilename='laplace_MPI+MPI.txt'
 
-nloops=5
+nloops=3
 npt=`grep -c ^processor /proc/cpuinfo`
 np="$(($npt / 1))"
 npps="$(($np / 2))"

@@ -13,7 +13,7 @@ outputFilename='laplace_MPI+OpenMP.txt'
 export KMP_AFFINITY=disabled
 # needed by intel compiler in Blue Waters
 
-nloops=5
+nloops=3
 npt=`grep -c ^processor /proc/cpuinfo`
 np="$(($npt / 1))"
 npps="$(($np / 2))"
