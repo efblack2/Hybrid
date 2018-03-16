@@ -43,20 +43,22 @@ echo $sequence
 
 if [ -n "$LM_LICENSE_FILE" ]; then
     echo "Pgi Compiler"
-    MP_BIND="yes"
+    export MP_BIND="yes"
     #MP_BLIST="0-$npm1"
-    MP_BLIST=$sequence
+    export MP_BLIST=$sequence
     echo $MP_BLIST
 elif [ -n "$INTEL_LICENSE_FILE" ]; then
     echo "Intel Compiler"
-    export KMP_AFFINITY=scatter
+    export OMP_PLACES=sockets
+    export OMP_PROC_BIND=true
+    #export KMP_AFFINITY=scatter
     # needed to use dissabled in Blue waters
     #export KMP_AFFINITY=disabled
 else
     echo "Gnu Compiler"
+    export OMP_PLACES=sockets
+    export OMP_PROC_BIND=true
     #GOMP_CPU_AFFINITY="0-$npm1"
-    GOMP_CPU_AFFINITY=$sequence
-    echo $GOMP_CPU_AFFINITY
 fi  
 
 rm -f $tempFilename
