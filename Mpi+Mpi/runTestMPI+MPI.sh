@@ -12,6 +12,39 @@ outputFilename='laplace_MPI+MPI.txt'
 nloops=5
 npt=`grep -c ^processor /proc/cpuinfo`
 np="$(($npt / 1))"
+npps="$(($np / 2))"
+npm1="$(($np - 1))"
+
+sequence=''
+##########################################
+for i in  `seq 0 $((npps-1))`; do
+    sequence+=$i','
+    sequence+=$(($i +  $((np/2))  ))','
+done
+##########################################
+for i in `seq 0 $((npm1))`; do
+    sequence+=$i','
+done
+##########################################
+#for i in `seq 0 2 $((npm1))`; do
+#    sequence+=$i','
+#done
+#for i in `seq 1 2 $((npm1))`; do
+#    sequence+=$i','
+#done
+##########################################
+
+sequence=${sequence%?}
+echo $sequence
+
+if [ -n "$LM_LICENSE_FILE" ]; then
+    echo "Pgi Compiler"
+elif [ -n "$INTEL_LICENSE_FILE" ]; then
+    echo "Intel Compiler"
+else
+    echo "Gnu Compiler"
+fi  
+
 
 rm -f $tempFilename
 

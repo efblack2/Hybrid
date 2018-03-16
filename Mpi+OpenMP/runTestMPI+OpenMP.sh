@@ -16,6 +16,49 @@ export KMP_AFFINITY=disabled
 nloops=5
 npt=`grep -c ^processor /proc/cpuinfo`
 np="$(($npt / 1))"
+np="$(($npt / 1))"
+npps="$(($np / 2))"
+npm1="$(($np - 1))"
+
+sequence=''
+##########################################
+for i in  `seq 0 $((npps-1))`; do
+    sequence+=$i','
+    sequence+=$(($i +  $((np/2))  ))','
+done
+##########################################
+#for i in `seq 0 $((npm1))`; do
+#    sequence+=$i','
+#done
+##########################################
+#for i in `seq 0 2 $((npm1))`; do
+#    sequence+=$i','
+#done
+#for i in `seq 1 2 $((npm1))`; do
+#    sequence+=$i','
+#done
+##########################################
+
+sequence=${sequence%?}
+echo $sequence
+
+if [ -n "$LM_LICENSE_FILE" ]; then
+    echo "Pgi Compiler"
+    MP_BIND="yes"
+    #MP_BLIST="0-$npm1"
+    MP_BLIST=$sequence
+    echo $MP_BLIST
+elif [ -n "$INTEL_LICENSE_FILE" ]; then
+    echo "Intel Compiler"
+    export KMP_AFFINITY=scatter
+    # needed to use dissabled in Blue waters
+    #export KMP_AFFINITY=disabled
+else
+    echo "Gnu Compiler"
+    #GOMP_CPU_AFFINITY="0-$npm1"
+    GOMP_CPU_AFFINITY=$sequence
+    echo $GOMP_CPU_AFFINITY
+fi  
 
 rm -f $tempFilename
 
