@@ -1,8 +1,9 @@
-1 threads: the min is 89.611328
-2 threads: the min is 48.676713
-3 threads: the min is 36.653775
-4 threads: the min is 33.129738
-5 threads: the min is 31.234393
-6 threads: the min is 30.486659
-7 threads: the min is 30.644737
-8 threads: the min is 31.783800
+1 threads: the min is 87.322456
+2 threads: the min is 44.929712
+4 threads: the min is 25.135212
+6 threads: the min is 19.844746
+8 threads: the min is 17.936641
+10 threads: the min is 18.901277
+12 threads: the min is 19.098998
+14 threads: the min is 21.113888
+16 threads: the min is 28.822938
