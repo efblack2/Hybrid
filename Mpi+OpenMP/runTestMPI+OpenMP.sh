@@ -39,8 +39,8 @@ echo $sequence
 if [ -n "$LM_LICENSE_FILE" ]; then
     echo "Pgi Compiler"
     export MP_BIND="yes"
-    #MP_BLIST="0-$npm1"
     export MP_BLIST=$sequence
+    #export MP_BLIST="0-$npm1"
     echo $MP_BLIST
 elif [ -n "$INTEL_LICENSE_FILE" ]; then
     echo "Intel Compiler"
@@ -51,9 +51,10 @@ elif [ -n "$INTEL_LICENSE_FILE" ]; then
     #export KMP_AFFINITY=disabled
 else
     echo "Gnu Compiler"
-    export OMP_PLACES=sockets
-    export OMP_PROC_BIND=true
-    #GOMP_CPU_AFFINITY="0-$npm1"
+    #export OMP_PLACES=sockets
+    #export OMP_PROC_BIND=true
+    export GOMP_CPU_AFFINITY=$sequence
+    #export GOMP_CPU_AFFINITY="0-$npm1"
 fi
 
 rm -f $tempFilename
