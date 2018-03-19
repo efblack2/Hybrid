@@ -6,13 +6,13 @@ then
 fi
 
 tempFilename='anyTempFileNameWillWork.txt'
-
 outputFilename='laplace_MPI+MPI.txt'
 
 nloops=3
 npt=`grep -c ^processor /proc/cpuinfo`
 np="$(($npt / 1))"
-npps="$(($np / 2))"
+slots=`numactl -H | grep available | awk '{}{print $2}{}'`
+npps="$(($np / $slots))"
 npm1="$(($np - 1))"
 
 sequence=''
