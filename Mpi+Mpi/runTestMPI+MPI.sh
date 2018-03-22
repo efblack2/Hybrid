@@ -9,22 +9,25 @@ tempFilename='anyTempFileNameWillWork.txt'
 outputFilename='laplace_MPI+MPI.txt'
 
 nloops=3
+
 npt=`grep -c ^processor /proc/cpuinfo`
-sockets=`lscpu | grep Socket | awk '{}{print $2}{}'`
-tpc=`lscpu | grep -i thread | awk '{}{print $4}{}'`
+numaNodes=`lscpu | grep "NUMA node(s):" | awk '{}{print $3}{}'`
+tpc=`lscpu | grep "Thread(s) per core:" | awk '{}{print $4}{}'`
 np="$(($npt / $tpc))"
-npps="$(($np / $sockets))"
+npps="$(($np / $numaNodes))"
 npm1="$(($np - 1))"
 
-sequence=''
+
+seqArray=()
 ##########################################
 for i in  `seq 0 $((npps-1))`; do
-    sequence+=$i','
-    sequence+=$(($i +  $((np/2))  ))','
+    for j in `seq 0 $((numaNodes-1))`; do
+        seqArray[i*$numaNodes+j]=$((i+j*npps))
+    done
 done
 ##########################################
 #for i in `seq 0 $((npm1))`; do
-#    sequence+=$i','
+#    seqArray[i]=$i
 #done
 ##########################################
 #for i in `seq 0 2 $((npm1))`; do
@@ -35,26 +38,31 @@ done
 #done
 ##########################################
 
-sequence=${sequence%?}
-echo $sequence
+#echo ${seqArray[*]}
 
-if [ -n "$LM_LICENSE_FILE" ]; then
+if [ -n "$PGI" ]; then
     echo "Pgi Compiler"
 elif [ -n "$INTEL_LICENSE_FILE" ]; then
     echo "Intel Compiler"
 else
     echo "Gnu Compiler"
-fi
-
+fi  
 
 rm -f $tempFilename
 
 for i in 1  `seq 2 2 $np`; do
-#for i in  1 4 `seq 4  4 $np`; do
+    pId=$((i-1))
+    sequence=''
+    for p in `seq 0 $((pId))`; do
+        sequence+=${seqArray[p]}','
+    done
+    sequence=${sequence%?}
+    echo $sequence
 
     for j in  `seq 1 $nloops`; do
         echo number of processors: $i, run number: $j
-        mpiexec -n $i laplace_MPI+MPI  $1 | grep Total >>  $tempFilename
+        mpiexec -n $i  laplace_MPI+MPI  $1 | grep Total >>  $tempFilename
+        #mpiexec -n $i  taskset -c $sequence  laplace_MPI+MPI  $1 | grep Total >>  $tempFilename
         #aprun -n $i laplace_MPI+MPI  $1 | grep Total >>  $tempFilename
     done
 done

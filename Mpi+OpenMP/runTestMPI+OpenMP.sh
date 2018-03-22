@@ -9,22 +9,25 @@ tempFilename='anyTempFileNameWillWork.txt'
 outputFilename='laplace_MPI+OpenMP.txt'
 
 nloops=3
+
+
 npt=`grep -c ^processor /proc/cpuinfo`
-sockets=`lscpu | grep Socket | awk '{}{print $2}{}'`
-tpc=`lscpu | grep -i thread | awk '{}{print $4}{}'`
+numaNodes=`lscpu | grep "NUMA node(s):" | awk '{}{print $3}{}'`
+tpc=`lscpu | grep "Thread(s) per core:" | awk '{}{print $4}{}'`
 np="$(($npt / $tpc))"
-npps="$(($np / $sockets))"
+npps="$(($np / $numaNodes))"
 npm1="$(($np - 1))"
 
-sequence=''
+seqArray=()
 ##########################################
 for i in  `seq 0 $((npps-1))`; do
-    sequence+=$i','
-    sequence+=$(($i +  $((np/2))  ))','
+    for j in `seq 0 $((numaNodes-1))`; do
+        seqArray[i*$numaNodes+j]=$((i+j*npps))
+    done
 done
 ##########################################
 #for i in `seq 0 $((npm1))`; do
-#    sequence+=$i','
+#    seqArray[i]=$i
 #done
 ##########################################
 #for i in `seq 0 2 $((npm1))`; do
@@ -35,10 +38,16 @@ done
 #done
 ##########################################
 
+#echo ${seqArray[*]}
+sequence=''
+for p in `seq 0 $((  npm1  ))`; do
+    sequence+=${seqArray[p]}','
+done
 sequence=${sequence%?}
 echo $sequence
 
-if [ -n "$LM_LICENSE_FILE" ]; then
+
+if [ -n "$PGI" ]; then
     echo "Pgi Compiler"
     export MP_BIND="yes"
     export MP_BLIST=$sequence
@@ -53,9 +62,9 @@ elif [ -n "$INTEL_LICENSE_FILE" ]; then
     #export KMP_AFFINITY=disabled
 else
     echo "Gnu Compiler"
-    #export OMP_PLACES=sockets
-    #export OMP_PROC_BIND=true
-    export GOMP_CPU_AFFINITY=$sequence
+    export OMP_PLACES=sockets
+    export OMP_PROC_BIND=true
+    #export GOMP_CPU_AFFINITY=$sequence
     #export GOMP_CPU_AFFINITY="0-$npm1"
 fi
 
