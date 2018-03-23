@@ -23,8 +23,8 @@ make clean; make
 
 cd ../../
 
-source setPgi 18.1
-source setPgiMpi 18.1
+source setPgi 18.3
+source setPgiMpi 18.3
 
 
 cd Mpi+OpenMP/buildPgi

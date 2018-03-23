@@ -44,13 +44,11 @@ for p in `seq 0 $((  npm1  ))`; do
     sequence+=${seqArray[p]}','
 done
 sequence=${sequence%?}
-echo $sequence
-
 
 if [ -n "$PGI" ]; then
     echo "Pgi Compiler"
-    export MP_BIND="yes"
     export MP_BLIST=$sequence
+    export MP_BIND="yes"
     #export MP_BLIST="0-$npm1"
     echo $MP_BLIST
 elif [ -n "$INTEL_LICENSE_FILE" ]; then
@@ -62,9 +60,9 @@ elif [ -n "$INTEL_LICENSE_FILE" ]; then
     #export KMP_AFFINITY=disabled
 else
     echo "Gnu Compiler"
-    export OMP_PLACES=sockets
+    #export OMP_PLACES=sockets
+    export GOMP_CPU_AFFINITY=$sequence
     export OMP_PROC_BIND=true
-    #export GOMP_CPU_AFFINITY=$sequence
     #export GOMP_CPU_AFFINITY="0-$npm1"
 fi
 
