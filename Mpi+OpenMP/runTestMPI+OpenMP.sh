@@ -53,6 +53,9 @@ if [ -n "$PGI" ]; then
     echo $MP_BLIST
 elif [ -n "$INTEL_LICENSE_FILE" ]; then
     echo "Intel Compiler"
+    #np=15
+    #npps="$(($np / $numaNodes))"
+    #npm1="$(($np - 1))"
     export OMP_PLACES=sockets
     export OMP_PROC_BIND=true
     #export KMP_AFFINITY=scatter

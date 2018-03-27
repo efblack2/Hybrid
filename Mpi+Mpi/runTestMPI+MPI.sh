@@ -18,50 +18,26 @@ npps="$(($np / $numaNodes))"
 npm1="$(($np - 1))"
 
 
-seqArray=()
-##########################################
-for i in  `seq 0 $((npps-1))`; do
-    for j in `seq 0 $((numaNodes-1))`; do
-        seqArray[i*$numaNodes+j]=$((i+j*npps))
-    done
-done
-##########################################
-#for i in `seq 0 $((npm1))`; do
-#    seqArray[i]=$i
-#done
-##########################################
-#for i in `seq 0 2 $((npm1))`; do
-#    sequence+=$i','
-#done
-#for i in `seq 1 2 $((npm1))`; do
-#    sequence+=$i','
-#done
-##########################################
-
-#echo ${seqArray[*]}
-
 if [ -n "$PGI" ]; then
     echo "Pgi Compiler"
+    bindings=" --bind-to core  --report-bindings"
 elif [ -n "$INTEL_LICENSE_FILE" ]; then
     echo "Intel Compiler"
+    #np=15
+    #npps="$(($np / $numaNodes))"
+    #npm1="$(($np - 1))"
+    bindings="-genv I_MPI_PIN_DOMAIN=core -genv I_MPI_PIN_ORDER=scatter -genv I_MPI_DEBUG=4"
 else
     echo "Gnu Compiler"
-fi  
+    bindings=" --bind-to core --report-bindings"
+fi
 
 rm -f $tempFilename
 
 for i in 1  `seq 2 2 $np`; do
-    pId=$((i-1))
-    sequence=''
-    for p in `seq 0 $((pId))`; do
-        sequence+=${seqArray[p]}','
-    done
-    sequence=${sequence%?}
-    echo $sequence
-
     for j in  `seq 1 $nloops`; do
         echo number of processors: $i, run number: $j
-        mpiexec -n $i  laplace_MPI+MPI  $1 | grep Total >>  $tempFilename
+        mpiexec $bindings  -n $i  laplace_MPI+MPI  $1 | grep Total >>  $tempFilename
         #mpiexec -n $i  taskset -c $sequence  laplace_MPI+MPI  $1 | grep Total >>  $tempFilename
         #aprun -n $i laplace_MPI+MPI  $1 | grep Total >>  $tempFilename
     done
