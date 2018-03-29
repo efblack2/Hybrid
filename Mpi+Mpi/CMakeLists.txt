@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.9)
 
-project(laplace_MPI+MPI)
+project(laplace_MPI+MPI C)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_BUILD_TYPE Release)
@@ -34,5 +34,4 @@ MESSAGE( STATUS "CMAKE_C_COMPILER_ID: "         ${CMAKE_C_COMPILER_ID} )
 MESSAGE( STATUS "CMAKE_C_FLAGS: "               ${CMAKE_C_FLAGS} )
 MESSAGE( STATUS "CMAKE_CURRENT_SOURCE_DIR: "    ${CMAKE_CURRENT_SOURCE_DIR} )
 ########### end of Debug messages #################
-
 
