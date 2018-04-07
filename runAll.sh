@@ -2,11 +2,11 @@
 
 cd Mpi+OpenMP/buildGnu
 make clean; make
-../runTestMPI+OpenMP.sh 4000 gnu
+../runTest.sh 1000 gnu
 
 cd ../../Mpi+Mpi/buildGnu
 make clean; make
-../runTestMPI+MPI.sh    4000 gnu
+../runTest.sh 1000 gnu
 
 cd ../../
 
@@ -15,11 +15,11 @@ source setImpi
 
 cd Mpi+OpenMP/buildIntel
 make clean; make
-../runTestMPI+OpenMP.sh 4000 intel
+../runTest.sh 1000 intel
 
 cd ../../Mpi+Mpi/buildIntel
 make clean; make
-../runTestMPI+MPI.sh    4000 intel
+../runTest.sh 1000 intel
 
 cd ../../
 
@@ -29,11 +29,11 @@ source setPgiMpi 18.3
 
 cd Mpi+OpenMP/buildPgi
 make clean; make
-../runTestMPI+OpenMP.sh 4000 pgi
+../runTest.sh 1000 pgi
 
 cd ../../Mpi+Mpi/buildPgi
 make clean; make
-../runTestMPI+MPI.sh    4000 pgi
+../runTest.sh 1000 pgi
 
 cd ../../
 

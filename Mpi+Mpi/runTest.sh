@@ -8,10 +8,10 @@ fi
 tempFilename='anyTempFileNameWillWork.txt'
 outputFilename='laplace_MPI+MPI.txt'
 
-nloops=3
+nloops=4
 
 # Determining MPI implementation and binding options #
-MPI=`mpiexec --version | head -1 | awk '{print $1}' ` 
+MPI=`mpiexec --version | head -1 | awk '{print $1}' `
 
 if [ "$MPI" == "HYDRA" ]; then
     echo "MPICH"
