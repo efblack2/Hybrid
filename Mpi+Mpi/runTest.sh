@@ -51,8 +51,6 @@ for i in 1  `seq 2 2 $np`; do
     for j in  `seq 1 $nloops`; do
         echo number of processors: $i, run number: $j
         mpiexec $bindings  -n $i  laplace_MPI+MPI  $1 | grep Total >>  $tempFilename
-        #mpiexec -n $i  taskset -c $sequence  laplace_MPI+MPI  $1 | grep Total >>  $tempFilename
-        #aprun -n $i laplace_MPI+MPI  $1 | grep Total >>  $tempFilename
     done
 done
 
