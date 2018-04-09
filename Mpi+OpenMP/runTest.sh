@@ -10,6 +10,23 @@ outputFilename='laplace_MPI+OpenMP.txt'
 
 nloops=4
 
+# Determining MPI implementation and binding options #
+MPI=`mpiexec --version | head -1 | awk '{print $1}' `
+
+if [ "$MPI" == "HYDRA" ]; then
+    echo "MPICH"
+    bindings="--bind-to socket"
+    export HYDRA_TOPO_DEBUG=1
+elif [ "$MPI" == "Intel(R)" ]; then
+    echo "Intel MPI"
+    bindings="-genv I_MPI_PIN_DOMAIN=node -genv I_MPI_PIN_ORDER=scatter -genv I_MPI_DEBUG=4"
+elif [ "$MPI" == "mpiexec" ]; then
+    echo "open-mpi"
+    bindings="--bind-to none --report-bindings"
+fi
+# end of Determining MPI implementation and binding options #
+
+
 npt=`grep -c ^processor /proc/cpuinfo`
 numaNodes=`lscpu | grep "NUMA node(s):" | awk '{}{print $3}{}'`
 tpc=`lscpu | grep "Thread(s) per core:" | awk '{}{print $4}{}'`
@@ -63,10 +80,10 @@ elif [ -n "$INTEL_LICENSE_FILE" ]; then
     #export KMP_AFFINITY=disabled
 else
     echo "Gnu Compiler"
-    #export OMP_PROC_BIND=spread
-    #export OMP_PLACES=sockets
-    export OMP_PROC_BIND=true
-    export GOMP_CPU_AFFINITY=$sequence
+    export OMP_PROC_BIND=spread
+    export OMP_PLACES=sockets
+    #export OMP_PROC_BIND=true
+    #export GOMP_CPU_AFFINITY=$sequence
 fi
 
 rm -f $tempFilename
@@ -76,7 +93,7 @@ for i in  1 `seq 2  2 $np`; do
     export OMP_NUM_THREADS=$i
     for j in  `seq 1 $nloops`; do
         echo number of threads: $i, run number: $j
-        mpiexec -n 1 laplace_MPI+OpenMP $1 | grep Total >>  $tempFilename
+        mpiexec $bindings -n 1 laplace_MPI+OpenMP $1 | grep Total >>  $tempFilename
         #aprun -n 1  -N 1 -d $i laplace_MPI+OpenMP $1 | grep Total >>  $tempFilename
     done
 done
