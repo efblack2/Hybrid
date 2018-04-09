@@ -15,7 +15,7 @@ MPI=`mpiexec --version | head -1 | awk '{print $1}' `
 
 if [ "$MPI" == "HYDRA" ]; then
     echo "MPICH"
-    bindings="--bind-to socket"
+    bindings="--bind-to none"
     export HYDRA_TOPO_DEBUG=1
 elif [ "$MPI" == "Intel(R)" ]; then
     echo "Intel MPI"
