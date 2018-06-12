@@ -1,0 +1,9 @@
+1 processors: the min is 25.110523
+2 processors: the min is 13.366144
+4 processors: the min is 7.065961
+6 processors: the min is 5.389169
+8 processors: the min is 4.986577
+10 processors: the min is 4.761045
+12 processors: the min is 4.759085
+14 processors: the min is 4.748813
+16 processors: the min is 4.915856
