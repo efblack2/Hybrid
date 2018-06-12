@@ -6,16 +6,19 @@ then
 fi
 
 cd $1/gnu
-paste laplace_MPI+MPI.txt  laplace_MPI+OpenMP.txt > laplace.txt
-paste laplace_MPI+MPI.txt  laplace_MPI+MPI_fence.txt > laplace_fence.txt
+paste laplace_MPI+OpenMP.txt laplace_MPI.txt  > laplace.txt
+paste laplace_MPI+MPI.txt    laplace_MPI.txt  > laplace2.txt
+#paste laplace_MPI+MPI.txt  laplace_MPI+MPI_fence.txt > laplace_fence.txt
 
 cd ../intel
-paste laplace_MPI+MPI.txt  laplace_MPI+OpenMP.txt > laplace.txt
-paste laplace_MPI+MPI.txt  laplace_MPI+MPI_fence.txt > laplace_fence.txt
+paste laplace_MPI+OpenMP.txt laplace_MPI.txt  > laplace.txt
+paste laplace_MPI+MPI.txt    laplace_MPI.txt  > laplace2.txt
+#paste laplace_MPI+MPI.txt  laplace_MPI+MPI_fence.txt > laplace_fence.txt
 
 cd ../pgi
-paste laplace_MPI+MPI.txt  laplace_MPI+OpenMP.txt > laplace.txt
-paste laplace_MPI+MPI.txt  laplace_MPI+MPI_fence.txt > laplace_fence.txt
+paste laplace_MPI+OpenMP.txt laplace_MPI.txt  > laplace.txt
+paste laplace_MPI+MPI.txt    laplace_MPI.txt  > laplace2.txt
+#paste laplace_MPI+MPI.txt  laplace_MPI+MPI_fence.txt > laplace_fence.txt
 
 cd ../..
 
@@ -41,5 +44,6 @@ rm temp.pdf $1Ratio_Gnu.pdf
 
 
 rm `find . -name  laplace.txt`
-rm `find . -name  laplace_fence.txt`
+rm `find . -name  laplace2.txt`
+#rm `find . -name  laplace_fence.txt`
 
