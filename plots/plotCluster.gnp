@@ -1,0 +1,37 @@
+#!/usr/bin/gnuplot
+# call it as:
+# gnuplot -c plotCluster.gnp cluster
+#
+machine=ARG1
+
+set terminal pdf enhanced
+set output machine.".pdf"
+
+load 'style.gnp'
+
+
+set key top right nobox
+set grid
+
+set title machine
+#set label "" at screen 0.5, 0.9 center font "Arial,11"
+set label "Hybrid Programing Model - 3 Node example" at graph 0.5, 1.035 center font "Arial,11"
+
+#set format y "%.2f"
+set xlabel "Total number of Processors/Threads"
+set ylabel "Time [S]"
+
+set yrange [0:]
+set style data histogram
+set style histogram cluster gap 1
+set style fill solid
+set boxwidth 0.85
+set xtics format ""
+set grid ytics
+
+plot  machine.'/gnu/laplace.txt' using 6:xtic(1) title "Pure MPI" ls 2,\
+      ''                         using 12 title "MPI+OpenMP" ls 4,\
+      ''                         using 18 title "MPI+MPI" ls 6
+     
+
+
