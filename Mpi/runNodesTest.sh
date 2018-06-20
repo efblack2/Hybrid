@@ -8,7 +8,7 @@ fi
 tempFilename='anyTempFileNameWillWork.txt'
 outputFilename='laplace_MPI.txt'
 
-nloops=4
+nloops=5
 
 # Determining MPI implementation and binding options #
 MPI=`mpiexec --version | head -1 | awk '{print $1}' `
@@ -29,20 +29,23 @@ fi
 npt=`grep -c ^processor /proc/cpuinfo`
 numaNodes=`lscpu | grep "NUMA node(s):" | awk '{}{print $3}{}'`
 tpc=`lscpu | grep "Thread(s) per core:" | awk '{}{print $4}{}'`
-np="$(($npt / $tpc))"
+#np="$(($npt / $tpc))"
+np=16
 npps="$(($np / $numaNodes))"
 npm1="$(($np - 1))"
 
 
 rm -f $tempFilename
 
-nnodes=3
+nnodes=4
+#nnodes=3
 for i in 1  `seq 2 2 $np`; do
     nRanks="$(($nnodes*$i))"
     #echo $nRanks
     for j in  `seq 1 $nloops`; do
         echo number of processors: $nRanks, run number: $j
-        mpiexec $bindings -host stout:$i,porter:$i,koelsch:$i -n $nRanks  laplace_MPI  $1 | grep Total >>  $tempFilename
+        mpiexec $bindings -host koelsch:$i,dunkel:$i,stout:$i,porter:$i -n $nRanks  laplace_MPI  $1 | grep Total >>  $tempFilename
+        #mpiexec $bindings -host koelsch:$i,dunkel:$i,porter:$i -n $nRanks  laplace_MPI  $1 | grep Total >>  $tempFilename
     done
 done
 

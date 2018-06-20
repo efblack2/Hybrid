@@ -8,7 +8,7 @@ fi
 tempFilename='anyTempFileNameWillWork.txt'
 outputFilename='laplace_MPI+OpenMP.txt'
 
-nloops=4
+nloops=5
 
 # Determining MPI implementation and binding options #
 MPI=`mpiexec --version | head -1 | awk '{print $1}' `
@@ -30,7 +30,9 @@ fi
 npt=`grep -c ^processor /proc/cpuinfo`
 numaNodes=`lscpu | grep "NUMA node(s):" | awk '{}{print $3}{}'`
 tpc=`lscpu | grep "Thread(s) per core:" | awk '{}{print $4}{}'`
-np="$(($npt / $tpc))"
+#np="$(($npt / $tpc))"
+np=16
+
 npps="$(($np / $numaNodes))"
 npm1="$(($np - 1))"
 
@@ -65,15 +67,17 @@ sequence=${sequence%?}
 
 rm -f $tempFilename
 
-nnodes=3
+#nnodes=3
+nnodes=4
 
 for i in  1 `seq 2  2 $np`; do
     nRanks="$(($nnodes*$i))"
     ompParameters="-x OMP_NUM_THREADS=$i -x OMP_PROC_BIND=spread -x OMP_PLACES=sockets -x OMP_DISPLAY_ENV=true "
-    #echo $ompParameters    
+    #echo $ompParameters
     for j in  `seq 1 $nloops`; do
         echo number of threads: $i, run number: $j
-        mpiexec $bindings $ompParameters -host stout:1,porter:1,koelsch:1 -n $nnodes laplace_MPI+OpenMP $1 | grep Total >>  $tempFilename
+        mpiexec $bindings $ompParameters -host koelsch:1,dunkel:1,stout:1,porter:1  -n $nnodes laplace_MPI+OpenMP $1 | grep Total >>  $tempFilename
+        #mpiexec $bindings $ompParameters -host koelsch:1,dunkel:1,porter:1  -n $nnodes laplace_MPI+OpenMP $1 | grep Total >>  $tempFilename
     done
 done
 
