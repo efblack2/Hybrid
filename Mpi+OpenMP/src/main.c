@@ -93,17 +93,24 @@ int main(int argc, char *argv[])
         dt = 0.0;  // reset largest temperature change
         #pragma omp parallel reduction (max:dt)
         dt = laplace(Temperature,Temperature_last, nRows-2);
-        MPI_Allreduce(MPI_IN_PLACE,&dt, 1,MPI_DOUBLE,MPI_MAX,MPI_COMM_WORLD);
         
         if (myWorldRank < worldSize-1) { 
             MPI_Irecv(&Temperature[(nRows-1)*COL2],COL2,MPI_DOUBLE,myWorldRank+1,200,MPI_COMM_WORLD,&request[0]);
             MPI_Isend(&Temperature[(nRows-2)*COL2],COL2,MPI_DOUBLE,myWorldRank+1,100,MPI_COMM_WORLD,&request[1]);
-            MPI_Waitall(2,request, status);
         } // end if //  
 
         if (myWorldRank > 0)  {
             MPI_Irecv(&Temperature[0]   ,COL2,MPI_DOUBLE,myWorldRank-1,100,MPI_COMM_WORLD,&request[0]);
             MPI_Isend(&Temperature[COL2],COL2,MPI_DOUBLE,myWorldRank-1,200,MPI_COMM_WORLD,&request[1]);
+        } // end if //
+
+        MPI_Allreduce(MPI_IN_PLACE,&dt, 1,MPI_DOUBLE,MPI_MAX,MPI_COMM_WORLD);
+
+        if (myWorldRank < worldSize-1) { 
+            MPI_Waitall(2,request, status);
+        } // end if //  
+
+        if (myWorldRank > 0)  {
             MPI_Waitall(2,request, status);
         } // end if //
         
