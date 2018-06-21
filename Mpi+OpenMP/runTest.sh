@@ -35,39 +35,11 @@ npps="$(($np / $numaNodes))"
 npm1="$(($np - 1))"
 
 
-seqArray=()
-##########################################
-for i in  `seq 0 $((npps-1))`; do
-    for j in `seq 0 $((numaNodes-1))`; do
-        seqArray[i*$numaNodes+j]=$((i+j*npps))
-    done
-done
-##########################################
-#for i in `seq 0 $((npm1))`; do
-#    seqArray[i]=$i
-#done
-##########################################
-#for i in `seq 0 2 $((npm1))`; do
-#    sequence+=$i','
-#done
-#for i in `seq 1 2 $((npm1))`; do
-#    sequence+=$i','
-#done
-##########################################
-
-#echo ${seqArray[*]}
-sequence=''
-for p in `seq 0 $((  npm1  ))`; do
-    sequence+=${seqArray[p]}','
-done
-sequence=${sequence%?}
 export OMP_DISPLAY_ENV=true
 if [ -n "$PGI" ]; then
     echo "Pgi Compiler"
-    export MP_BLIST=$sequence
-    export MP_BIND="yes"
-    #export MP_BLIST="0-$npm1"
-    echo $MP_BLIST
+    export OMP_PROC_BIND=spread
+    export OMP_PLACES=sockets
 elif [ -n "$INTEL_LICENSE_FILE" ]; then
     echo "Intel Compiler"
     #np=15
