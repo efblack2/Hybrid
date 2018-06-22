@@ -22,7 +22,7 @@ elif [ "$MPI" == "Intel(R)" ]; then
     bindings="-genv I_MPI_PIN_DOMAIN=core -genv I_MPI_PIN_ORDER=spread -genv I_MPI_DEBUG=4 -genv I_MPI_FABRICS=shm:ofi"
 elif [ "$MPI" == "mpiexec" ]; then
     echo "open-mpi"
-    bindings="--bind-to core --report-bindings"
+    bindings="--bind-to core --report-bindings --mca btl_tcp_if_exclude docker0,127.0.0.1/8"
 fi
 # end of Determining MPI implementation and binding options #
 
