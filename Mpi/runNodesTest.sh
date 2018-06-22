@@ -19,7 +19,7 @@ if [ "$MPI" == "HYDRA" ]; then
     export HYDRA_TOPO_DEBUG=1
 elif [ "$MPI" == "Intel(R)" ]; then
     echo "Intel MPI"
-    bindings="-genv I_MPI_PIN_DOMAIN=core -genv I_MPI_PIN_ORDER=spread -genv I_MPI_DEBUG=4"
+    bindings="-genv I_MPI_PIN_DOMAIN=core -genv I_MPI_PIN_ORDER=spread -genv I_MPI_DEBUG=4 -genv I_MPI_FABRICS=shm:ofi"
 elif [ "$MPI" == "mpiexec" ]; then
     echo "open-mpi"
     bindings="--bind-to core --report-bindings"
@@ -44,7 +44,11 @@ for i in 1  `seq 2 2 $np`; do
     #echo $nRanks
     for j in  `seq 1 $nloops`; do
         echo number of processors: $nRanks, run number: $j
-        mpiexec $bindings -host koelsch:$i,dunkel:$i,stout:$i,porter:$i -n $nRanks  laplace_MPI  $1 | grep Total >>  $tempFilename
+        if [ "$MPI" == "Intel(R)" ]; then
+            mpiexec $bindings -hosts stout,koelsch,dunkel,porter -n $nRanks -ppn $i laplace_MPI  $1 | grep Total >>  $tempFilename
+        elif [ "$MPI" == "mpiexec" ]; then
+            mpiexec $bindings -host stout:$i,koelsch:$i,dunkel:$i,porter:$i -n $nRanks  laplace_MPI  $1 | grep Total >>  $tempFilename
+        fi
         #mpiexec $bindings -host koelsch:$i,dunkel:$i,porter:$i -n $nRanks  laplace_MPI  $1 | grep Total >>  $tempFilename
     done
 done

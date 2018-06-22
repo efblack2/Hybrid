@@ -19,7 +19,7 @@ if [ "$MPI" == "HYDRA" ]; then
     export HYDRA_TOPO_DEBUG=1
 elif [ "$MPI" == "Intel(R)" ]; then
     echo "Intel MPI"
-    bindings="-genv I_MPI_PIN_DOMAIN=node -genv I_MPI_PIN_ORDER=spread -genv I_MPI_DEBUG=4"
+    bindings="-genv I_MPI_PIN_DOMAIN=node -genv I_MPI_PIN_ORDER=spread -genv I_MPI_DEBUG=4 -genv I_MPI_FABRICS=shm:ofi"
 elif [ "$MPI" == "mpiexec" ]; then
     echo "open-mpi"
     bindings="--bind-to none --report-bindings"
@@ -72,11 +72,19 @@ nnodes=4
 
 for i in  1 `seq 2  2 $np`; do
     nRanks="$(($nnodes*$i))"
-    ompParameters="-x OMP_NUM_THREADS=$i -x OMP_PROC_BIND=spread -x OMP_PLACES=sockets -x OMP_DISPLAY_ENV=true "
+    if [ "$MPI" == "Intel(R)" ]; then
+        ompParameters="-genv OMP_NUM_THREADS=$i -genv OMP_PROC_BIND=spread -genv OMP_PLACES=cores -genv OMP_DISPLAY_ENV=true "
+    elif [ "$MPI" == "mpiexec" ]; then
+        ompParameters="-x    OMP_NUM_THREADS=$i -x    OMP_PROC_BIND=spread -x    OMP_PLACES=sockets -x  OMP_DISPLAY_ENV=true "
+    fi
     #echo $ompParameters
     for j in  `seq 1 $nloops`; do
         echo number of threads: $i, run number: $j
-        mpiexec $bindings $ompParameters -host koelsch:1,dunkel:1,stout:1,porter:1  -n $nnodes laplace_MPI+OpenMP $1 | grep Total >>  $tempFilename
+        if [ "$MPI" == "Intel(R)" ]; then
+            mpiexec $bindings $ompParameters -hosts stout,koelsch,dunkel,porter  -n $nnodes -ppn 1 laplace_MPI+OpenMP $1 | grep Total >>  $tempFilename
+        elif [ "$MPI" == "mpiexec" ]; then
+            mpiexec $bindings $ompParameters -host stout:1,koelsch:1,dunkel:1,porter:1  -n $nnodes laplace_MPI+OpenMP $1 | grep Total >>  $tempFilename
+        fi
         #mpiexec $bindings $ompParameters -host koelsch:1,dunkel:1,porter:1  -n $nnodes laplace_MPI+OpenMP $1 | grep Total >>  $tempFilename
     done
 done
