@@ -1,11 +1,11 @@
 #!/usr/bin/gnuplot
 # call it as:
-# gnuplot -c plotCluster.gnp cluster
+# gnuplot -c plotCluster.gnp compiler
 #
-machine=ARG1
+compiler=ARG1
 
 set terminal pdf enhanced
-set output machine.".pdf"
+set output "cluster_".compiler.".pdf"
 
 #load 'style.gnp'
 
@@ -17,7 +17,7 @@ set key top right nobox
 set grid
 
 #set title machine
-set title "Four nodes cluster"
+set title "Four nodes cluster for ".compiler." compiler"
 #set label "" at screen 0.5, 0.9 center font "Arial,11"
 set label "Hybrid Programing Model" at graph 0.5, 1.035 center font "Arial,11"
 
@@ -33,9 +33,9 @@ set boxwidth 0.90
 set xtics format ""
 set grid ytics
 
-plot  machine.'/gnu/laplace.txt' using 6:xtic(1) title "Pure MPI"   ls 1,\
-      ''                         using 18        title "MPI+MPI"    ls 2,\
-      ''                         using 12        title "MPI+OpenMP" ls 3
+plot  'cluster/'.compiler.'/laplace.txt' using 6:xtic(1) title "Pure MPI"   ls 1,\
+      ''                                 using 18        title "MPI+MPI"    ls 2,\
+      ''                                 using 12        title "MPI+OpenMP" ls 3
      
 
 
